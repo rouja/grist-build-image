@@ -1,0 +1,21 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgresql
+spec:
+  instances: 1
+  resources:
+    requests:
+      cpu: "1"
+      memory: 500Mi
+    limits:
+      cpu: "1"
+      memory: 500Mi
+  bootstrap:
+    initdb:
+      database: grist
+      owner: grist
+      secret:
+        name: postgresql
+  storage:
+    size: 1Gi
