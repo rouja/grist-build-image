@@ -1,0 +1,19 @@
+redis:
+  master:
+    resources:
+      requests:
+        cpu: 1
+        memory: 256Mi
+      limits:
+        cpu: 1
+        memory: 256Mi
+    podSecurityContext:
+      fsGroup: 1001390000
+    containerSecurityContext:
+      runAsUser: 1001390000
+      runAsGroup: 1001390000
+  architecture: standalone
+  auth:
+    enabled: true
+    existingSecret: redis
+    existingSecretPasswordKey: password

@@ -3,4 +3,8 @@ name: postgresql
 type: application
 version: 0.0.1
 appVersion: 0.0.1
+dependencies:
+- name: redis
+  version: 18.1.5
+  repository: oci://registry-1.docker.io/bitnamicharts
 
