@@ -23,15 +23,6 @@ commonEnvVars: &commonEnvVars
     secretKeyRef:
       name: redis
       key: url
-  GRIST_OIDC_IDP_SCOPES: "openid email profile organization"
-  GRIST_OIDC_IDP_ISSUER: https://fca.integ01.dev-agentconnect.fr/api/v2/
-  GRIST_OIDC_IDP_CLIENT_ID: toto
-  GRIST_OIDC_IDP_CLIENT_SECRET: tutu
-  GRIST_OIDC_IDP_SCOPES: "openid email profile organization"
-  GRIST_OIDC_IDP_ENABLED_PROTECTIONS: "STATE,NONCE"
-  GRIST_OIDC_IDP_ACR_VALUES: "eidas1"
-  GRIST_OIDC_IDP_EXTRA_CLIENT_METADATA: '{"userinfo_signed_response_alg": "RS256"}'
-  GRIST_OIDC_SP_IGNORE_EMAIL_VERIFIED: true
   GRIST_TEMPLATE_ORG: templates
   GRIST_USE_ENGINE_IO: "1"
   GRIST_ORG_IN_PATH: "true"
