@@ -2,16 +2,16 @@ redis:
   master:
     resources:
       requests:
-        cpu: 1
+        cpu: 500m
         memory: 256Mi
       limits:
-        cpu: 1
+        cpu: 500m
         memory: 256Mi
     podSecurityContext:
-      fsGroup: 1001390000
+      fsGroup: 1001000000
     containerSecurityContext:
-      runAsUser: 1001390000
-      runAsGroup: 1001390000
+      runAsUser: 1001000000
+      runAsGroup: 1001000000
   architecture: standalone
   auth:
     enabled: true
@@ -19,6 +19,8 @@ redis:
     existingSecretPasswordKey: password
 
 commonEnvVars: &commonEnvVars
+  APP_HOME_INTERNAL_URL: http://pm-grist-dev-deployment-6293-home-wk
+  APP_HOME_URL: https://grist-dinum-test.dev.numerique-interieur.com
   REDIS_URL:
     secretKeyRef:
       name: redis
@@ -53,6 +55,10 @@ commonEnvVars: &commonEnvVars
 
 grist:
   ingress:
+    annotations: null
+    enabled: true
+    tls:
+      enabled: false
     host: grist-dinum-test.dev.numerique-interieur.com
   
   homeWorker:
@@ -68,8 +74,8 @@ grist:
       <<: *commonEnvVars
       GRIST_SERVERS: home,static
     securityContext:
-      runAsUser: 1001390001
-      runAsGroup: 1001390001
+      runAsUser: 1001000000
+      runAsGroup: 1001000000
 
   docWorker:
     resources:
@@ -77,36 +83,49 @@ grist:
         cpu: 500m
         memory: 256Mi
       limits:
-        cpu: 500m
-        memory: 256Mi
+        cpu: 1000m
+        memory: 2Gi
     replicas: 1
     envVars:
       <<: *commonEnvVars
       GRIST_DOCS_MINIO_PORT: 443
       GRIST_DOCS_MINIO_USE_SSL: 1
       GRIST_SERVERS: docs
+      GVISOR_LIMIT_MEMORY: "1610612736"
       GRIST_DOCS_MINIO_BUCKET:
         secretKeyRef:
-          name: minio
-          key: minioBucket
+          name: bucket
+          key: bucket
       GRIST_DOCS_MINIO_ENDPOINT:
         secretKeyRef:
-          name: minio
+          name: bucket
           key: endpoint
       GRIST_DOCS_MINIO_BUCKET_REGION: local
       GRIST_DOCS_MINIO_ACCESS_KEY:
         secretKeyRef:
-          name: minio
+          name: bucket
           key: accessKey
       GRIST_DOCS_MINIO_SECRET_KEY:
         secretKeyRef:
-          name: minio
+          name: bucket
           key: secretKey
     persistence:
       persit:
         type: emptyDir
         mountPath: /persist
     securityContext:
-      runAsUser: 1001390001
-      runAsGroup: 1001390001
+      runAsUser: 1001000000
+      runAsGroup: 1001000000
     shareProcessNamespace: true
+
+  loadBalancer:
+    securityContext:
+      runAsUser: 1001000000
+      runAsGroup: 1001000000
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
